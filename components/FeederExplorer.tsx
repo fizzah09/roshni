@@ -55,13 +55,21 @@ export const FeederExplorer: React.FC<FeederExplorerProps> = ({
     try {
       setLoading(true);
       const res = await fetch(`/api/feeders?disco=${selectedDisco}`);
+      if (!res.ok) {
+        throw new Error(`HTTP error ${res.status}`);
+      }
       const data = await res.json();
-      setFeeders(data);
-      if (data.length > 0 && !selectedFeeder) {
-        setSelectedFeeder(data[0]);
+      if (Array.isArray(data)) {
+        setFeeders(data);
+        if (data.length > 0 && !selectedFeeder) {
+          setSelectedFeeder(data[0]);
+        }
+      } else {
+        setFeeders([]);
       }
     } catch (err) {
       console.error('Failed to fetch feeders', err);
+      setFeeders([]);
     } finally {
       setLoading(false);
     }
