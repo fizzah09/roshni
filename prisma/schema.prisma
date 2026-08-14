@@ -1,0 +1,63 @@
+datasource db {
+  provider = "sqlite"
+  url      = "file:./dev.db"
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model Disco {
+  id        String   @id @default(cuid())
+  code      String   @unique
+  name      String
+  region    String
+  feeders   Feeder[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Feeder {
+  id             String          @id @default(cuid())
+  discoId        String
+  disco          Disco           @relation(fields: [discoId], references: [id], onDelete: Cascade)
+  name           String
+  code           String?
+  gridStation    String
+  city           String
+  lossCategory   String          // "Category 1", "Category 2", "Category 3", "Category 4"
+  lossPercentage String          // "4%", "24%", etc.
+  status         String          @default("OFFLINE") // "OFFLINE", "ONLINE", "SCHEDULED"
+  description    String?
+  schedules      ScheduleEntry[]
+  outages        OutageReport[]
+  createdAt      DateTime        @default(now())
+  updatedAt      DateTime        @updatedAt
+}
+
+model ScheduleEntry {
+  id          String   @id @default(cuid())
+  feederId    String
+  feeder      Feeder   @relation(fields: [feederId], references: [id], onDelete: Cascade)
+  source      String   @default("seeded") // "seeded" or "user_submitted"
+  dayOfWeek   String   @default("Daily")
+  startTime   String   // e.g. "10:35"
+  endTime     String   // e.g. "13:35"
+  startDecimal Float   // e.g. 10.58
+  endDecimal   Float   // e.g. 13.58
+  submittedBy String?
+  createdAt   DateTime @default(now())
+}
+
+model OutageReport {
+  id           String   @id @default(cuid())
+  feederId     String
+  feeder       Feeder   @relation(fields: [feederId], references: [id], onDelete: Cascade)
+  startTime    DateTime
+  endTime      DateTime?
+  outageType   String   @default("unscheduled")
+  note         String?
+  deviceId     String   @default("anonymous_device")
+  flaggedCount Int      @default(0)
+  createdAt    DateTime @default(now())
+}

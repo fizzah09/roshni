@@ -1,0 +1,73 @@
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model Disco {
+  id        String   @id @default(cuid())
+  code      String   @unique
+  name      String
+  region    String
+  feeders   Feeder[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Feeder {
+  id             String          @id @default(cuid())
+  discoId        String
+  disco          Disco           @relation(fields: [discoId], references: [id], onDelete: Cascade)
+  name           String
+  code           String?
+  gridStation    String
+  city           String
+  lossCategory   String
+  lossPercentage String
+  status         String          @default("OFFLINE")
+  description    String?
+  schedules      ScheduleEntry[]
+  outages        OutageReport[]
+  createdAt      DateTime        @default(now())
+  updatedAt      DateTime        @updatedAt
+}
+
+model ScheduleEntry {
+  id           String   @id @default(cuid())
+  feederId     String
+  feeder       Feeder   @relation(fields: [feederId], references: [id], onDelete: Cascade)
+  source       String   @default("seeded")
+  dayOfWeek    String   @default("Daily")
+  startTime    String
+  endTime      String
+  startDecimal Float
+  endDecimal   Float
+  submittedBy  String?
+  createdAt    DateTime @default(now())
+}
+
+model User {
+  id          String   @id @default(cuid())
+  googleId    String   @unique
+  email       String
+  displayName String
+  avatarUrl   String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model OutageReport {
+  id           String   @id @default(cuid())
+  feederId     String
+  feeder       Feeder   @relation(fields: [feederId], references: [id], onDelete: Cascade)
+  startTime    DateTime
+  endTime      DateTime?
+  outageType   String   @default("unscheduled")
+  note         String?
+  deviceId     String   @default("anonymous_device")
+  flaggedCount Int      @default(0)
+  createdAt    DateTime @default(now())
+}

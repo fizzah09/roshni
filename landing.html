@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Welcome — after dark</title>
+
+  <!-- Google fonts (same as the sign‑in page) -->
+  <link
+    href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@500&display=swap"
+    rel="stylesheet">
+
+  <link rel="stylesheet" href="landing.css">
+
+  <!-- The same motion‑sensor script from the sign‑in page – reused unchanged -->
+  <script defer src="glow.js"></script>
+</head>
+
+<body>
+
+  <!-- Ambient night texture -->
+  <div class="sky"></div>
+
+  <!-- Cursor glow & dot -->
+  <div class="glow" id="glow"></div>
+  <div class="cursor-dot" id="cursorDot"></div>
+
+  <!-- ====================== HERO SECTION ====================== -->
+  <section class="hero">
+    <h1 class="title">After Dark</h1>
+    <p class="subtitle">A luminous web experience that awakens with you.</p>
+
+    <button class="cta" id="ctaBtn">Get Started</button>
+  </section>
+
+  <!-- ====================== FEATURES ====================== -->
+  <section class="features">
+    <div class="feature-card">
+      <h2>Dynamic Glow</h2>
+      <p>Follow the cursor with a soft amber halo that reacts to your motion.</p>
+    </div>
+    <div class="feature-card">
+      <h2>Glass‑morphic UI</h2>
+      <p>Frosted‑glass panels blend seamlessly with the dark night backdrop.</p>
+    </div>
+    <div class="feature-card">
+      <h2>Reduced‑Motion Friendly</h2>
+      <p>Accessible fallback for users who prefer minimal animation.</p>
+    </div>
+  </section>
+
+  <!-- ====================== FOOTER ====================== -->
+  <footer class="footer">
+    <p>© 2026 After Dark. All rights reserved.</p>
+    <p><a href="#">Privacy Policy</a> • <a href="#">Terms of Service</a></p>
+  </footer>
+</body>
+
+</html>

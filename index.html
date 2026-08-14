@@ -1,0 +1,587 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>ROSHNI System - Official SimpleMaps Style Pakistan Map & Feeder Tracker</title>
+    
+    <!-- Tailwind CSS with CDN Plugins -->
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    
+    <!-- Google Fonts & Material Symbols -->
+    <link href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@400;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+    
+    <!-- Roshni Custom Design Tokens Configuration -->
+    <script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "surface-container-high": "#272b2b",
+                        "secondary-fixed": "#ffdad8",
+                        "surface-container": "#1c2020",
+                        "tertiary-fixed-dim": "#ffb955",
+                        "on-tertiary-fixed": "#291800",
+                        "secondary-fixed-dim": "#ffb3b0",
+                        "inverse-surface": "#e0e3e2",
+                        "surface-dim": "#101414",
+                        "on-surface-variant": "#bacac5",
+                        "primary-container": "#2dd4bf",
+                        "tertiary": "#ffd39a",
+                        "tertiary-fixed": "#ffddb4",
+                        "surface-bright": "#363a3a",
+                        "on-background": "#e0e3e2",
+                        "on-secondary-fixed-variant": "#92011a",
+                        "surface-container-highest": "#313535",
+                        "on-tertiary-fixed-variant": "#633f00",
+                        "tertiary-container": "#feae2c",
+                        "inverse-primary": "#006b5f",
+                        "error-container": "#93000a",
+                        "on-primary-container": "#00574d",
+                        "on-secondary": "#68000f",
+                        "on-error": "#690005",
+                        "secondary": "#ffb3b0",
+                        "outline-variant": "#3c4a46",
+                        "on-surface": "#e0e3e2",
+                        "surface-container-lowest": "#0b0f0f",
+                        "primary-fixed-dim": "#3cddc7",
+                        "error": "#ffb4ab",
+                        "surface-container-low": "#181c1c",
+                        "primary": "#57f1db",
+                        "surface": "#101414"
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0.125rem",
+                        "lg": "0.25rem",
+                        "xl": "0.5rem",
+                        "full": "0.75rem"
+                    },
+                    spacing: {
+                        "xs": "4px",
+                        "grid-gutter": "12px",
+                        "md": "16px",
+                        "xl": "48px",
+                        "base": "4px",
+                        "grid-margin": "20px",
+                        "sm": "8px",
+                        "lg": "24px"
+                    },
+                    fontFamily: {
+                        "headline-lg-mobile": ["Public Sans"],
+                        "label-mono-sm": ["JetBrains Mono"],
+                        "label-mono-lg": ["JetBrains Mono"],
+                        "body-md": ["Public Sans"],
+                        "display-lg": ["JetBrains Mono"],
+                        "body-lg": ["Public Sans"],
+                        "headline-md": ["Public Sans"],
+                        "headline-lg": ["Public Sans"]
+                    },
+                    fontSize: {
+                        "headline-lg-mobile": ["28px", { lineHeight: "1.2", fontWeight: "700" }],
+                        "label-mono-sm": ["12px", { lineHeight: "1.2", fontWeight: "500" }],
+                        "label-mono-lg": ["16px", { lineHeight: "1.4", letterSpacing: "0.05em", fontWeight: "500" }],
+                        "body-md": ["16px", { lineHeight: "1.5", fontWeight: "400" }],
+                        "display-lg": ["48px", { lineHeight: "1.1", letterSpacing: "-0.02em", fontWeight: "700" }],
+                        "body-lg": ["18px", { lineHeight: "1.6", fontWeight: "400" }],
+                        "headline-md": ["24px", { lineHeight: "1.3", fontWeight: "600" }],
+                        "headline-lg": ["32px", { lineHeight: "1.2", fontWeight: "700" }]
+                    }
+                }
+            }
+        }
+    </script>
+    
+    <link rel="stylesheet" href="style.css"/>
+</head>
+<body class="text-on-surface flex flex-col min-h-screen selection:bg-primary-container selection:text-on-primary-container">
+
+    <!-- TopAppBar -->
+    <header class="bg-surface-dim border-b border-outline-variant sticky top-0 w-full z-50">
+        <div class="flex justify-between items-center w-full px-grid-margin py-sm max-w-7xl mx-auto">
+            <div class="flex items-center gap-2 cursor-pointer" onclick="switchView('home')">
+                <span class="material-symbols-outlined text-primary" style="font-variation-settings: 'FILL' 1;">bolt</span>
+                <span class="text-headline-md font-headline-md font-bold tracking-tighter text-primary" data-tkey="system_title">ROSHNI_SYSTEM</span>
+            </div>
+            
+            <nav class="hidden md:flex gap-4 items-center text-label-mono-lg font-label-mono-lg">
+                <a class="text-primary font-bold hover:bg-surface-container-highest transition-colors px-3 py-1 rounded cursor-pointer" data-view-target="home" data-tkey="nav_home">Home</a>
+                <a class="text-on-surface-variant hover:bg-surface-container-highest transition-colors px-3 py-1 rounded cursor-pointer" data-view-target="report" data-tkey="nav_report">Report</a>
+                <a class="text-on-surface-variant hover:bg-surface-container-highest transition-colors px-3 py-1 rounded cursor-pointer" data-view-target="ingest" data-tkey="nav_ingest">Ingest</a>
+                <a class="text-on-surface-variant hover:bg-surface-container-highest transition-colors px-3 py-1 rounded cursor-pointer" data-view-target="insights" data-tkey="nav_insights">Insights</a>
+            </nav>
+            
+            <button class="lang-toggle-btn text-label-mono-lg font-label-mono-lg text-primary border border-primary px-3 py-1 rounded hover:bg-surface-container-highest transition-colors font-bold">
+                EN/UR
+            </button>
+        </div>
+    </header>
+
+    <!-- Main Container -->
+    <main class="flex-grow w-full max-w-7xl mx-auto px-grid-margin py-lg md:py-xl flex flex-col gap-lg pb-24 md:pb-lg">
+        
+        <!-- ========================================== -->
+        <!-- VIEW 1: HOME / FEEDER SEARCH & MAP VIEW   -->
+        <!-- ========================================== -->
+        <section id="view-home" class="app-view flex flex-col gap-lg w-full">
+            
+            <!-- Search Section -->
+            <div class="flex flex-col gap-sm w-full max-w-3xl mx-auto relative">
+                <h1 class="text-headline-lg-mobile md:text-headline-lg font-headline-lg-mobile md:font-headline-lg text-on-surface text-center mb-1 tracking-tight" data-tkey="locate_feeder">
+                    LOCATE FEEDER / تلاش کریں
+                </h1>
+                <p class="text-center text-on-surface-variant text-label-mono-sm mb-2">National Pakistan DISCO Load Shedding Tracker & KE Territory Feeder Directory</p>
+                
+                <div class="relative w-full group">
+                    <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none z-10">
+                        <span class="material-symbols-outlined text-on-surface-variant group-focus-within:text-primary transition-colors">search</span>
+                    </div>
+                    <input 
+                        id="feederSearchInput" 
+                        type="text" 
+                        class="w-full bg-[#0B0F0F] text-on-surface text-body-lg font-body-lg border border-outline-variant rounded-lg pl-12 pr-4 py-4 focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-all shadow-md"
+                        placeholder="Search DISCO (LESCO, IESCO, KE, PESCO...), Grid, City, or Feeder..."
+                        autocomplete="off"
+                    />
+                    <div class="absolute top-4 right-4 hidden group-focus-within:block text-label-mono-sm font-label-mono-sm text-primary opacity-80 z-10">
+                        INPUT_ACTIVE
+                    </div>
+                    
+                    <!-- Autocomplete Dropdown -->
+                    <div id="searchAutocompleteDropdown" class="absolute w-full mt-1 bg-[#1C2222] border border-primary/40 rounded-lg shadow-2xl z-40 overflow-hidden hidden">
+                        <ul id="searchAutocompleteList" class="text-body-md font-body-md text-on-surface-variant max-h-64 overflow-y-auto">
+                            <!-- Injected via JS -->
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- DISCO & Grid Filter Controls -->
+                <div class="flex flex-wrap gap-2 justify-center items-center mt-2">
+                    <button class="filter-chip px-3 py-1 rounded-full border border-primary text-label-mono-sm font-label-mono-sm bg-primary text-on-primary font-bold transition-all" data-disco="ALL">ALL DISCOs</button>
+                    <button class="filter-chip px-3 py-1 rounded-full border border-outline-variant text-label-mono-sm font-label-mono-sm bg-surface-container text-on-surface-variant hover:border-primary/50 transition-all" data-disco="LESCO">LESCO</button>
+                    <button class="filter-chip px-3 py-1 rounded-full border border-outline-variant text-label-mono-sm font-label-mono-sm bg-surface-container text-on-surface-variant hover:border-primary/50 transition-all" data-disco="IESCO">IESCO</button>
+                    <button class="filter-chip px-3 py-1 rounded-full border border-outline-variant text-label-mono-sm font-label-mono-sm bg-surface-container text-on-surface-variant hover:border-primary/50 transition-all" data-disco="K-ELECTRIC">K-ELECTRIC</button>
+                    <button class="filter-chip px-3 py-1 rounded-full border border-outline-variant text-label-mono-sm font-label-mono-sm bg-surface-container text-on-surface-variant hover:border-primary/50 transition-all" data-disco="PESCO">PESCO</button>
+                    <button class="filter-chip px-3 py-1 rounded-full border border-outline-variant text-label-mono-sm font-label-mono-sm bg-surface-container text-on-surface-variant hover:border-primary/50 transition-all" data-disco="MEPCO">MEPCO</button>
+
+                    <!-- Grid Station Selector -->
+                    <select id="gridStationSelect" class="bg-surface-container border border-outline-variant text-primary text-label-mono-sm font-label-mono-sm rounded-full px-3 py-1 focus:outline-none cursor-pointer">
+                        <option value="ALL">All Grid Stations</option>
+                        <option value="AIRPORT">KE AIRPORT Grid</option>
+                        <option value="BALDIA">KE BALDIA Grid</option>
+                        <option value="CLIFTON">KE CLIFTON & DEFENCE</option>
+                        <option value="GULISTAN E JOHAR">KE GULISTAN E JOHAR</option>
+                        <option value="GULBERG S/S">LESCO Gulberg</option>
+                        <option value="ISLAMABAD F-8">IESCO F-8 Markaz</option>
+                        <option value="PESHAWAR TOWN">PESCO Peshawar</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- INTERACTIVE SIMPLEMAPS-STYLE PAKISTAN MAP SECTION -->
+            <div class="bg-surface-container border border-outline-variant rounded-lg p-md relative overflow-hidden flex flex-col gap-3">
+                <div class="flex justify-between items-center flex-wrap gap-2">
+                    <div>
+                        <h2 id="mapTitleText" class="text-headline-md font-headline-md text-on-surface flex items-center gap-2">
+                            <span class="material-symbols-outlined text-primary">public</span>
+                            OFFICIAL PAKISTAN HIGH-PRECISION VECTOR MAP (SIMPLEMAPS STYLE)
+                        </h2>
+                        <p id="mapSubtitleText" class="text-xs text-on-surface-variant font-label-mono-sm">Hover over any province or DISCO territory to inspect live grid compliance, total feeders, and load shedding status.</p>
+                    </div>
+
+                    <!-- Map View Mode Toggle -->
+                    <div class="flex gap-1 bg-surface-container-lowest p-1 rounded-lg border border-outline-variant/40">
+                        <button class="map-mode-btn px-3 py-1 rounded text-xs font-label-mono-sm bg-primary text-on-primary font-bold transition-all" data-map-mode="pakistan">
+                            PAKISTAN MAP
+                        </button>
+                        <button class="map-mode-btn px-3 py-1 rounded text-xs font-label-mono-sm bg-surface-container-highest text-on-surface-variant transition-all" data-map-mode="karachi">
+                            KARACHI CITY MAP
+                        </button>
+                    </div>
+                </div>
+
+                <!-- SVG Vector Map Canvas Container -->
+                <div class="relative w-full h-[520px] bg-surface-container-lowest border border-outline-variant/40 rounded overflow-hidden flex items-center justify-center bg-blueprint-grid">
+                    
+                    <!-- SimpleMaps Style Zoom Buttons (+ and -) -->
+                    <div class="absolute top-5 left-5 z-30 flex flex-col gap-2">
+                        <button onclick="zoomInMap()" class="simplemaps-zoom-btn" title="Zoom In">+</button>
+                        <button onclick="zoomOutMap()" class="simplemaps-zoom-btn" title="Zoom Out">−</button>
+                        <button onclick="resetMapZoom()" class="simplemaps-zoom-btn text-xs font-bold" title="Reset View">↺</button>
+                    </div>
+
+                    <svg id="mainMapSvg" viewBox="0 0 800 850" class="w-full h-full">
+                        <!-- Dynamic SimpleMaps Vector SVG Injected via JS -->
+                    </svg>
+
+                    <!-- Floating Glassmorphism Hover Card -->
+                    <div id="mapHoverCard" class="map-hover-card"></div>
+                </div>
+            </div>
+
+            <!-- Recent/Filtered Feeders Grid -->
+            <div class="flex flex-col gap-md mt-2">
+                <div class="flex justify-between items-end border-b border-outline-variant pb-2">
+                    <h2 class="text-headline-md font-headline-md text-on-surface" data-tkey="recent_feeders">RECENT FEEDERS & SCHEDULES</h2>
+                    <span class="text-label-mono-sm font-label-mono-sm text-on-surface-variant" data-tkey="last_readout">REAL K-ELECTRIC & DISCO DATASET</span>
+                </div>
+                
+                <div id="recentFeedersContainer" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-md">
+                    <!-- Dynamic Feeders Injected Here -->
+                </div>
+            </div>
+        </section>
+
+        <!-- ========================================== -->
+        <!-- VIEW 2: FEEDER DETAIL TIMELINE VIEW        -->
+        <!-- ========================================== -->
+        <section id="view-detail" class="app-view hidden flex-col gap-grid-gutter w-full max-w-4xl mx-auto">
+            
+            <div class="flex justify-between items-center flex-wrap gap-2 mb-1">
+                <button onclick="switchView('home')" class="text-label-mono-sm text-primary flex items-center gap-1 hover:underline">
+                    <span class="material-symbols-outlined text-[16px]">arrow_back</span> Back to Feeder Search
+                </button>
+                <div class="flex gap-2">
+                    <button onclick="downloadScheduleCSV()" class="bg-surface-container border border-primary/40 text-primary text-label-mono-sm font-bold px-3 py-1.5 rounded hover:bg-primary/10 transition-all flex items-center gap-1">
+                        <span class="material-symbols-outlined text-[16px]">download</span>
+                        <span data-tkey="download_csv">Download CSV</span>
+                    </button>
+                    <button onclick="downloadScheduleJSON()" class="bg-surface-container border border-outline-variant text-on-surface text-label-mono-sm font-bold px-3 py-1.5 rounded hover:bg-surface-container-highest transition-all flex items-center gap-1">
+                        <span class="material-symbols-outlined text-[16px]">code</span>
+                        <span data-tkey="download_json">Download JSON</span>
+                    </button>
+                </div>
+            </div>
+
+            <div class="flex flex-col gap-2 mb-2">
+                <div class="flex items-center gap-3 flex-wrap">
+                    <h1 id="detailFeederTitle" class="text-headline-lg-mobile md:text-headline-lg font-headline-lg-mobile md:font-headline-lg text-on-surface">
+                        BLOCK # 5 RMU (AIRPORT), K-ELECTRIC
+                    </h1>
+                    <div class="border border-error text-error px-2 py-0.5 rounded-DEFAULT inline-flex items-center gap-1 bg-error-container/10">
+                        <span class="material-symbols-outlined text-[16px]">warning</span>
+                        <span id="detailFeederCategory" class="text-label-mono-sm font-label-mono-sm uppercase">Category 3 / High Loss</span>
+                    </div>
+                </div>
+                <p id="detailFeederDescription" class="text-on-surface-variant text-label-mono-lg font-label-mono-lg">
+                    Official K-Electric Airport Grid station feeder. Under scheduled 4-cycle daily load management.
+                </p>
+            </div>
+
+            <div class="bg-surface-container border border-outline-variant p-md rounded-lg flex flex-col gap-2">
+                <div class="text-label-mono-sm font-label-mono-sm text-on-surface-variant uppercase flex justify-between">
+                    <span>DISCO Official Load Shedding Schedule Cycles</span>
+                    <span class="text-primary font-bold">Applicable 2026 Grid Matrix</span>
+                </div>
+                <div id="detailCyclesList" class="grid grid-cols-2 md:grid-cols-4 gap-2">
+                </div>
+            </div>
+
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-xs md:gap-grid-gutter">
+                <div class="bg-surface-container-low border border-outline-variant p-md relative overflow-hidden flex flex-col justify-between min-h-[120px] rounded-lg">
+                    <div class="absolute top-0 right-0 p-2 opacity-10">
+                        <span class="material-symbols-outlined text-[48px]">schedule</span>
+                    </div>
+                    <div class="text-on-surface-variant text-label-mono-sm font-label-mono-sm uppercase" data-tkey="scheduled_out">Scheduled Out (24h)</div>
+                    <div id="detailSchedOut" class="text-display-lg font-display-lg text-error">06<span class="text-headline-md font-headline-md">H</span></div>
+                </div>
+                
+                <div class="bg-surface-container-low border border-outline-variant p-md relative overflow-hidden flex flex-col justify-between min-h-[120px] rounded-lg">
+                    <div class="absolute top-0 left-0 w-full h-1 bg-primary"></div>
+                    <div class="text-on-surface-variant text-label-mono-sm font-label-mono-sm uppercase" data-tkey="actual_reported">Actual / Reported</div>
+                    <div id="detailActualOut" class="text-display-lg font-display-lg text-primary">07<span class="text-headline-md font-headline-md">H</span><span id="detailVariance" class="text-label-mono-sm font-label-mono-sm text-error ml-2">+1h var</span></div>
+                </div>
+                
+                <div class="bg-surface-container-low border border-outline-variant p-md flex flex-col justify-between min-h-[120px] md:col-span-2 rounded-lg">
+                    <div class="flex justify-between items-start">
+                        <div class="text-on-surface-variant text-label-mono-sm font-label-mono-sm uppercase" data-tkey="current_status">Current Status</div>
+                        <span class="material-symbols-outlined text-error" style="font-variation-settings: 'FILL' 1;">power_off</span>
+                    </div>
+                    <div class="flex flex-col">
+                        <span id="detailStatus" class="text-headline-md font-headline-md text-error">OFFLINE</span>
+                        <span id="detailETA" class="text-label-mono-sm font-label-mono-sm text-on-surface-variant">Scheduled restoration in 25 mins</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="bg-surface-container border border-outline-variant p-md mt-2 flex flex-col gap-4 rounded-lg">
+                <div class="flex justify-between items-center flex-wrap gap-2">
+                    <h2 class="text-headline-md font-headline-md text-on-surface" data-tkey="timeline_title">Timeline (Today)</h2>
+                    <div class="flex gap-4">
+                        <div class="flex items-center gap-2">
+                            <div class="w-4 h-4 hatch-pattern-error border border-error"></div>
+                            <span class="text-label-mono-sm font-label-mono-sm text-on-surface-variant" data-tkey="legend_scheduled">Scheduled</span>
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <div class="w-1.5 h-4 bg-primary"></div>
+                            <span class="text-label-mono-sm font-label-mono-sm text-on-surface-variant" data-tkey="legend_reported">Reported</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div id="detailTimelineAxis" class="relative w-full h-24 bg-surface-container-lowest border border-outline-variant overflow-hidden mt-2 rounded">
+                    <div class="absolute inset-0 flex justify-between px-2 pointer-events-none">
+                        <div class="w-px h-full bg-outline-variant/30 relative"><span class="absolute bottom-1 -left-2 text-[10px] text-on-surface-variant font-label-mono-sm">00</span></div>
+                        <div class="w-px h-full bg-outline-variant/30 relative"><span class="absolute bottom-1 -left-2 text-[10px] text-on-surface-variant font-label-mono-sm">04</span></div>
+                        <div class="w-px h-full bg-outline-variant/30 relative"><span class="absolute bottom-1 -left-2 text-[10px] text-on-surface-variant font-label-mono-sm">08</span></div>
+                        <div class="w-px h-full bg-outline-variant/50 relative"><span class="absolute bottom-1 -left-2 text-[10px] text-primary font-label-mono-sm">12</span></div>
+                        <div class="w-px h-full bg-outline-variant/30 relative"><span class="absolute bottom-1 -left-2 text-[10px] text-on-surface-variant font-label-mono-sm">16</span></div>
+                        <div class="w-px h-full bg-outline-variant/30 relative"><span class="absolute bottom-1 -left-2 text-[10px] text-on-surface-variant font-label-mono-sm">20</span></div>
+                        <div class="w-px h-full bg-outline-variant/30 relative"><span class="absolute bottom-1 -left-4 text-[10px] text-on-surface-variant font-label-mono-sm">24</span></div>
+                    </div>
+                </div>
+
+                <div class="flex justify-between items-center pt-2">
+                    <span class="text-label-mono-sm font-label-mono-sm text-on-surface-variant flex items-center gap-1">
+                        <span class="material-symbols-outlined text-[14px] text-primary">info</span> Unscheduled activity auto-matched with crowd reports
+                    </span>
+                </div>
+            </div>
+
+            <div class="mt-4 flex justify-center">
+                <button onclick="switchView('report')" class="w-full max-w-md bg-primary text-on-primary py-3.5 px-6 rounded font-label-mono-lg text-label-mono-lg uppercase font-bold flex items-center justify-center gap-2 hover:bg-primary-fixed transition-all active:scale-[0.97] shadow-[0_0_15px_rgba(87,241,219,0.3)]">
+                    <span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">add_alert</span>
+                    <span data-tkey="report_outage_btn">Report Outage Now</span>
+                </button>
+            </div>
+        </section>
+
+        <!-- ========================================== -->
+        <!-- VIEW 3: REPORT OUTAGE VIEW                 -->
+        <!-- ========================================== -->
+        <section id="view-report" class="app-view hidden flex flex-col items-center justify-center w-full max-w-lg mx-auto">
+            <div class="w-full">
+                <div class="mb-lg">
+                    <h1 class="text-headline-lg-mobile md:text-headline-lg font-headline-lg-mobile md:font-headline-lg mb-xs" data-tkey="report_outage_header">Report Outage</h1>
+                    <p id="reportTargetFeederLabel" class="text-on-surface-variant flex items-center gap-2">
+                        <span class="material-symbols-outlined text-primary text-sm">location_on</span>
+                        Reporting for <strong class="text-on-surface">BLOCK # 5 RMU, K-ELECTRIC</strong>
+                    </p>
+                </div>
+                
+                <div class="bg-surface-container border border-outline-variant rounded-lg p-md relative overflow-hidden">
+                    <div class="absolute top-0 left-0 w-full h-[3px] bg-error"></div>
+                    
+                    <form id="outageForm" class="flex flex-col gap-md relative z-10">
+                        <div class="input-group flex flex-col gap-xs relative">
+                            <label class="text-label-mono-sm font-label-mono-sm text-on-surface-variant uppercase" for="startTime" data-tkey="start_time">Start Time</label>
+                            <input id="startTime" name="startTime" type="datetime-local" required class="bg-surface-container-lowest border border-outline-variant text-on-surface rounded p-3 focus:outline-none focus:border-primary font-label-mono-lg"/>
+                        </div>
+                        
+                        <div class="input-group flex flex-col gap-xs relative">
+                            <label class="text-label-mono-sm font-label-mono-sm text-on-surface-variant uppercase flex justify-between" for="endTime">
+                                <span data-tkey="end_time">End Time</span>
+                                <span class="text-outline" data-tkey="optional">Optional</span>
+                            </label>
+                            <input id="endTime" name="endTime" type="datetime-local" class="bg-surface-container-lowest border border-outline-variant text-on-surface rounded p-3 focus:outline-none focus:border-primary font-label-mono-lg text-on-surface-variant"/>
+                            <p class="text-xs text-outline font-label-mono-sm mt-1">Leave blank if outage is ongoing.</p>
+                        </div>
+
+                        <div class="input-group flex flex-col gap-xs relative">
+                            <label class="text-label-mono-sm font-label-mono-sm text-on-surface-variant uppercase">Outage Type</label>
+                            <select id="outageCategory" class="bg-surface-container-lowest border border-outline-variant text-on-surface rounded p-3 focus:outline-none focus:border-primary font-body-md">
+                                <option value="unscheduled">Unscheduled Cut / Extra Cycle</option>
+                                <option value="tripping">Feeder Tripping / PMT Fault</option>
+                                <option value="transformer">Transformer Sparking</option>
+                                <option value="low_voltage">Severe Low Voltage / Fluctuation</option>
+                            </select>
+                        </div>
+                        
+                        <div class="input-group flex flex-col gap-xs relative">
+                            <label class="text-label-mono-sm font-label-mono-sm text-on-surface-variant uppercase flex justify-between" for="note">
+                                <span data-tkey="note_label">Note</span>
+                                <span class="text-outline" data-tkey="optional">Optional</span>
+                            </label>
+                            <textarea id="note" name="note" rows="3" placeholder="E.g., Extra outage cycle extended..." class="bg-surface-container-lowest border border-outline-variant text-on-surface rounded p-3 focus:outline-none focus:border-primary font-body-md resize-none"></textarea>
+                        </div>
+                        
+                        <button type="submit" class="mt-md w-full bg-primary text-on-primary font-bold text-label-mono-lg py-4 rounded hover:bg-primary-fixed transition-all active:scale-[0.97] flex items-center justify-center gap-2 shadow-[0_0_12px_rgba(87,241,219,0.3)] uppercase">
+                            <span class="material-symbols-outlined">send</span>
+                            <span data-tkey="submit_report">SUBMIT REPORT</span>
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </section>
+
+        <!-- ========================================== -->
+        <!-- VIEW 4: SCHEDULE INGESTION VIEW            -->
+        <!-- ========================================== -->
+        <section id="view-ingest" class="app-view hidden flex flex-col gap-lg w-full max-w-4xl mx-auto">
+            <div>
+                <h1 class="text-headline-lg font-headline-lg mb-1" data-tkey="ingest_title">DISCO Schedule Ingestion Engine</h1>
+                <p class="text-on-surface-variant font-label-mono-lg">Upload official load shedding schedules (PDF / CSV) from K-Electric, LESCO, IESCO, PESCO, MEPCO, etc., for automated vector matrix parsing.</p>
+            </div>
+
+            <div id="ingestDropZone" class="border-2 border-dashed border-outline-variant bg-surface-container rounded-lg p-8 text-center flex flex-col items-center justify-center gap-3 cursor-pointer hover:border-primary/60 transition-all relative">
+                <input id="ingestFileInput" type="file" accept=".pdf,.csv,.json" class="absolute inset-0 opacity-0 cursor-pointer"/>
+                <span class="material-symbols-outlined text-5xl text-primary">cloud_upload</span>
+                <div class="text-body-lg font-semibold text-on-surface" data-tkey="drag_drop_text">Drag and drop DISCO Official Schedule PDF or CSV file here</div>
+                <div class="text-label-mono-sm text-outline" data-tkey="or_browse">or click to browse local files</div>
+                <div id="ingestFileName" class="text-primary font-label-mono-lg mt-2"></div>
+                <div id="ingestFileStatus" class="text-xs text-on-surface-variant font-label-mono-sm"></div>
+            </div>
+
+            <div class="bg-surface-container border border-outline-variant rounded-lg p-md">
+                <div class="flex justify-between items-center mb-4 flex-wrap gap-2">
+                    <h2 class="text-headline-md font-headline-md text-on-surface">Ingestion Queue & Matrix Status</h2>
+                    <button id="publishScheduleBtn" onclick="triggerPublishSchedule()" class="bg-primary text-on-primary font-bold font-label-mono-lg px-4 py-2 rounded flex items-center gap-2 hover:bg-primary-fixed transition-colors">
+                        <span class="material-symbols-outlined">publish</span>
+                        <span data-tkey="parse_and_publish">PARSE & PUBLISH TO LIVE DB</span>
+                    </button>
+                </div>
+
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left border-collapse">
+                        <thead>
+                            <tr class="border-b border-outline-variant text-label-mono-sm text-on-surface-variant uppercase">
+                                <th class="p-3">DISCO</th>
+                                <th class="p-3">Source File</th>
+                                <th class="p-3">Extracted Feeders</th>
+                                <th class="p-3">Parser Status</th>
+                                <th class="p-3">Timestamp</th>
+                            </tr>
+                        </thead>
+                        <tbody id="ingestTableBody">
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <!-- ========================================== -->
+        <!-- VIEW 5: INSIGHTS & ANALYTICS VIEW          -->
+        <!-- ========================================== -->
+        <section id="view-insights" class="app-view hidden flex flex-col gap-lg w-full max-w-5xl mx-auto">
+            <div>
+                <h1 class="text-headline-lg font-headline-lg mb-1" data-tkey="insights_title">Grid Reliability & Discrepancy Analytics</h1>
+                <p class="text-on-surface-variant font-label-mono-lg">Crowd-sourced outage telemetry matched against official KE & DISCO load shedding declarations.</p>
+            </div>
+
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-md">
+                <div class="bg-surface-container border border-outline-variant p-md rounded-lg flex flex-col gap-1">
+                    <span class="text-label-mono-sm text-on-surface-variant uppercase">Grid Reliability Index</span>
+                    <span class="text-display-lg font-display-lg text-primary">74.2%</span>
+                    <span class="text-xs text-outline font-label-mono-sm">Based on 24h feed</span>
+                </div>
+                <div class="bg-surface-container border border-outline-variant p-md rounded-lg flex flex-col gap-1">
+                    <span class="text-label-mono-sm text-on-surface-variant uppercase">Total Outages Reported</span>
+                    <span class="text-display-lg font-display-lg text-error">1,428</span>
+                    <span class="text-xs text-error font-label-mono-sm">+18% vs yesterday</span>
+                </div>
+                <div class="bg-surface-container border border-outline-variant p-md rounded-lg flex flex-col gap-1">
+                    <span class="text-label-mono-sm text-on-surface-variant uppercase">Avg Unscheduled Var</span>
+                    <span class="text-display-lg font-display-lg text-tertiary-container">+1.4h</span>
+                    <span class="text-xs text-outline font-label-mono-sm">Unscheduled variance</span>
+                </div>
+                <div class="bg-surface-container border border-outline-variant p-md rounded-lg flex flex-col gap-1">
+                    <span class="text-label-mono-sm text-on-surface-variant uppercase">High Loss Feeder Ratio</span>
+                    <span class="text-display-lg font-display-lg text-secondary">38%</span>
+                    <span class="text-xs text-outline font-label-mono-sm">Category 3 & 4</span>
+                </div>
+            </div>
+
+            <div class="bg-surface-container border border-outline-variant p-md rounded-lg flex flex-col gap-4">
+                <h2 class="text-headline-md font-headline-md text-on-surface">DISCO Reliability Breakdown (% Schedule Adherence)</h2>
+                <div class="flex flex-col gap-3">
+                    <div>
+                        <div class="flex justify-between text-label-mono-sm mb-1">
+                            <span>IESCO (Islamabad)</span>
+                            <span class="text-primary font-bold">89% Compliant</span>
+                        </div>
+                        <div class="w-full h-3 bg-surface-dim rounded-full overflow-hidden">
+                            <div class="h-full bg-primary" style="width: 89%;"></div>
+                        </div>
+                    </div>
+                    <div>
+                        <div class="flex justify-between text-label-mono-sm mb-1">
+                            <span>GEPCO (Gujranwala)</span>
+                            <span class="text-primary font-bold">84% Compliant</span>
+                        </div>
+                        <div class="w-full h-3 bg-surface-dim rounded-full overflow-hidden">
+                            <div class="h-full bg-primary" style="width: 84%;"></div>
+                        </div>
+                    </div>
+                    <div>
+                        <div class="flex justify-between text-label-mono-sm mb-1">
+                            <span>K-ELECTRIC (Karachi)</span>
+                            <span class="text-tertiary-container font-bold">78% Compliant (4-Cycle Rotation)</span>
+                        </div>
+                        <div class="w-full h-3 bg-surface-dim rounded-full overflow-hidden">
+                            <div class="h-full bg-tertiary-container" style="width: 78%;"></div>
+                        </div>
+                    </div>
+                    <div>
+                        <div class="flex justify-between text-label-mono-sm mb-1">
+                            <span>LESCO (Lahore)</span>
+                            <span class="text-error font-bold">71% Compliant (+1.2h Unscheduled)</span>
+                        </div>
+                        <div class="w-full h-3 bg-surface-dim rounded-full overflow-hidden">
+                            <div class="h-full bg-error" style="width: 71%;"></div>
+                        </div>
+                    </div>
+                    <div>
+                        <div class="flex justify-between text-label-mono-sm mb-1">
+                            <span>PESCO (Peshawar)</span>
+                            <span class="text-error font-bold">54% Compliant (+2.1h Unscheduled)</span>
+                        </div>
+                        <div class="w-full h-3 bg-surface-dim rounded-full overflow-hidden">
+                            <div class="h-full bg-error" style="width: 54%;"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="bg-surface-container border border-outline-variant rounded-lg p-md">
+                <h2 class="text-headline-md font-headline-md text-on-surface mb-4">National DISCO Feeder Directory & Variance</h2>
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left border-collapse">
+                        <thead>
+                            <tr class="border-b border-outline-variant text-label-mono-sm text-on-surface-variant uppercase">
+                                <th class="p-3">Feeder Name</th>
+                                <th class="p-3">DISCO</th>
+                                <th class="p-3">Grid Station</th>
+                                <th class="p-3">Loss Tag</th>
+                                <th class="p-3">Sched Out</th>
+                                <th class="p-3">Actual Out</th>
+                                <th class="p-3">Variance</th>
+                            </tr>
+                        </thead>
+                        <tbody id="insightsTableBody">
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- BottomNavBar (Mobile Only) -->
+    <nav id="mobileBottomNav" class="md:hidden fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-4 py-2 bg-surface-container border-t border-outline-variant">
+        <a class="flex flex-col items-center justify-center text-primary p-2 cursor-pointer" data-view-target="home">
+            <span class="material-symbols-outlined">home</span>
+            <span class="text-label-mono-sm font-label-mono-sm mt-0.5" data-tkey="nav_home">Home</span>
+        </a>
+        <a class="flex flex-col items-center justify-center text-on-surface-variant p-2 hover:text-primary cursor-pointer" data-view-target="report">
+            <span class="material-symbols-outlined">notification_important</span>
+            <span class="text-label-mono-sm font-label-mono-sm mt-0.5" data-tkey="nav_report">Report</span>
+        </a>
+        <a class="flex flex-col items-center justify-center text-on-surface-variant p-2 hover:text-primary cursor-pointer" data-view-target="ingest">
+            <span class="material-symbols-outlined">data_object</span>
+            <span class="text-label-mono-sm font-label-mono-sm mt-0.5" data-tkey="nav_ingest">Ingest</span>
+        </a>
+        <a class="flex flex-col items-center justify-center text-on-surface-variant p-2 hover:text-primary cursor-pointer" data-view-target="insights">
+            <span class="material-symbols-outlined">bar_chart</span>
+            <span class="text-label-mono-sm font-label-mono-sm mt-0.5" data-tkey="nav_insights">Insights</span>
+        </a>
+    </nav>
+
+    <!-- Toast Notification Container -->
+    <div id="toastContainer" class="fixed bottom-24 md:bottom-10 left-0 right-0 flex justify-center pointer-events-none z-50">
+    </div>
+
+    <!-- Application Script -->
+    <script src="app.js"></script>
+</body>
+</html>
