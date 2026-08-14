@@ -343,7 +343,8 @@
   // 🔑  PASTE YOUR FIREBASE CONFIG HERE
   //     Firebase Console → Project Settings → Your apps → SDK setup
   // ──────────────────────────────────────────────────────────────────
-  const firebaseConfig = {
+  // Load Firebase config dynamically from environment variables or global override
+  const firebaseConfig = window.FIREBASE_CONFIG || {
     apiKey:            "AIzaSyCF7-kyIVj8dOiuFPxBFxgxun9NjVgX7I4",
     authDomain:        "roshni-68ef9.firebaseapp.com",
     projectId:         "roshni-68ef9",
