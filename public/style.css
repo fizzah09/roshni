@@ -1,0 +1,233 @@
+/* Roshni System - Design System Stylesheet */
+
+@import url('https://fonts.googleapis.com/css2?family=Public+Sans:wght@400;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap');
+
+:root {
+  --color-bg: #0B0F0F;
+  --color-surface-dim: #101414;
+  --color-surface-container-lowest: #0b0f0f;
+  --color-surface-container-low: #181c1c;
+  --color-surface-container: #1c2020;
+  --color-surface-container-high: #272b2b;
+  --color-surface-container-highest: #313535;
+  --color-primary: #57f1db;
+  --color-primary-container: #2dd4bf;
+  --color-on-primary: #003731;
+  --color-secondary: #ffb3b0;
+  --color-tertiary: #ffd39a;
+  --color-tertiary-container: #feae2c;
+  --color-error: #ffb4ab;
+  --color-error-container: #93000a;
+  --color-outline-variant: #3c4a46;
+  --color-outline: #859490;
+  --color-on-surface: #e0e3e2;
+  --color-on-surface-variant: #bacac5;
+}
+
+body {
+  background-color: var(--color-bg);
+  background-image: 
+    linear-gradient(to right, rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+  background-size: 24px 24px;
+  color: var(--color-on-surface);
+  font-family: 'Public Sans', sans-serif;
+}
+
+.bg-blueprint-grid {
+  background-image: 
+    linear-gradient(to right, rgba(186, 202, 197, 0.03) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(186, 202, 197, 0.03) 1px, transparent 1px);
+  background-size: 24px 24px;
+}
+
+.hatch-pattern-red {
+  background: repeating-linear-gradient(
+    45deg,
+    #93000a,
+    #93000a 4px,
+    #101414 4px,
+    #101414 8px
+  );
+}
+
+.hatch-pattern-error {
+  background: repeating-linear-gradient(
+    45deg,
+    rgba(255, 180, 171, 0.15),
+    rgba(255, 180, 171, 0.15) 4px,
+    rgba(255, 180, 171, 0.7) 4px,
+    rgba(255, 180, 171, 0.7) 6px
+  );
+}
+
+.hatch-pattern-amber {
+  background: repeating-linear-gradient(
+    45deg,
+    #feae2c,
+    #feae2c 4px,
+    #101414 4px,
+    #101414 8px
+  );
+}
+
+.glow-border {
+  box-shadow: 0 0 0 2px rgba(87, 241, 219, 0.2);
+}
+
+.fade-in-up {
+  opacity: 0;
+  transform: translateY(20px);
+  animation: fadeInUp 0.4s ease-out forwards;
+}
+
+@keyframes fadeInUp {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes pulse-glow {
+  0% { box-shadow: 0 0 0 0 rgba(87, 241, 219, 0.7); }
+  70% { box-shadow: 0 0 0 8px rgba(87, 241, 219, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(87, 241, 219, 0); }
+}
+
+.pulse-report {
+  animation: pulse-glow 2s infinite;
+}
+
+@keyframes slideUpFade {
+  from { opacity: 0; transform: translateY(100%); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.toast-enter {
+  animation: slideUpFade 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.timeline-block {
+  transition: width 0.8s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+/* ======================================================== */
+/* SIMPLEMAPS HIGH-PRECISION PAKISTAN VECTOR MAP STYLING    */
+/* ======================================================== */
+
+.simplemaps-pak-path, .map-zone {
+  fill: #6A93AC;
+  stroke: #ffffff;
+  stroke-width: 1.5;
+  stroke-linejoin: round;
+  stroke-linecap: round;
+  transition: all 0.25s ease;
+  cursor: pointer;
+  filter: drop-shadow(0 4px 6px rgba(0, 0, 0, 0.4));
+}
+
+.simplemaps-pak-path:hover, .map-zone:hover {
+  fill: #57f1db;
+  stroke: #ffffff;
+  stroke-width: 2.5;
+  filter: drop-shadow(0 0 15px rgba(87, 241, 219, 0.8));
+}
+
+.simplemaps-pak-path.active-zone, .map-zone.active-zone {
+  fill: #ffb4ab;
+  stroke: #ffffff;
+  stroke-width: 2.5;
+  filter: drop-shadow(0 0 15px rgba(255, 180, 171, 0.9));
+}
+
+/* ICT Islamabad Highlighted Square Node (Matching Screenshot) */
+.ict-square-node {
+  fill: #e91e63;
+  stroke: #ffffff;
+  stroke-width: 2;
+  transition: all 0.25s ease;
+  cursor: pointer;
+  animation: ictPulse 2s infinite alternate;
+}
+
+.ict-square-node:hover {
+  fill: #ff2a6d;
+  transform: scale(1.2);
+  filter: drop-shadow(0 0 10px #ff2a6d);
+}
+
+@keyframes ictPulse {
+  from { fill: #e91e63; }
+  to { fill: #ff2a6d; }
+}
+
+/* SimpleMaps Zoom Control Buttons (+ and -) */
+.simplemaps-zoom-btn {
+  background: #ffffff;
+  border: 1px solid #bacac5;
+  color: #101414;
+  width: 38px;
+  height: 38px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-family: 'Public Sans', sans-serif;
+  font-size: 22px;
+  font-weight: 700;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+  transition: all 0.2s ease;
+}
+
+.simplemaps-zoom-btn:hover {
+  background: #57f1db;
+  color: #003731;
+  border-color: #57f1db;
+  transform: scale(1.05);
+}
+
+/* Floating Glassmorphism Hover Card */
+.map-hover-card {
+  position: absolute;
+  pointer-events: none;
+  z-index: 70;
+  background: rgba(24, 28, 28, 0.94);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(87, 241, 219, 0.5);
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.9), 0 0 15px rgba(87, 241, 219, 0.25);
+  border-radius: 8px;
+  padding: 14px;
+  min-width: 280px;
+  transition: opacity 0.15s ease, transform 0.15s ease;
+  opacity: 0;
+  transform: translateY(10px);
+}
+
+.map-hover-card.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+::-webkit-scrollbar-track {
+  background: #101414;
+}
+::-webkit-scrollbar-thumb {
+  background: #3c4a46;
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #57f1db;
+}
+
+/* Urdu font adjustments when RTL */
+[dir="rtl"] {
+  font-family: 'Public Sans', 'Segoe UI', Tahoma, sans-serif;
+}
