@@ -1,8 +1,18 @@
 {
   "services": {
     "frontend": {
+      "name": "roshni-frontend",
       "root": ".",
       "framework": "nextjs"
     }
-  }
+  },
+  "rewrites": [
+    {
+      "source": "/(.*)",
+      "destination": {
+        "type": "service",
+        "service": "frontend"
+      }
+    }
+  ]
 }
