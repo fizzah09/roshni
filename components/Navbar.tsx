@@ -51,13 +51,22 @@ export const Navbar: React.FC<NavbarProps> = ({
           ))}
         </nav>
 
-        <button
-          onClick={onToggleLang}
-          className="flex items-center gap-1.5 text-sm font-mono text-primary border border-primary/50 px-3 py-1.5 rounded-md hover:bg-primary/10 transition-colors font-bold"
-        >
-          <Globe className="w-4 h-4" />
-          <span>{lang === 'en' ? 'EN / اردو' : 'اردو / EN'}</span>
-        </button>
+        <div className="flex items-center gap-3">
+          <a
+            href="/landing.html"
+            className="flex items-center gap-1.5 text-sm font-mono bg-primary text-on-primary px-3.5 py-1.5 rounded-md hover:opacity-90 transition-opacity font-bold shadow-[0_0_10px_rgba(87,241,219,0.3)]"
+          >
+            <span>{lang === 'en' ? 'Sign In / Login' : 'لاگ ان کریں'}</span>
+          </a>
+
+          <button
+            onClick={onToggleLang}
+            className="flex items-center gap-1.5 text-sm font-mono text-primary border border-primary/50 px-3 py-1.5 rounded-md hover:bg-primary/10 transition-colors font-bold"
+          >
+            <Globe className="w-4 h-4" />
+            <span>{lang === 'en' ? 'EN / اردو' : 'اردو / EN'}</span>
+          </button>
+        </div>
       </div>
     </header>
   );
