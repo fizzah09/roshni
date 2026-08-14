@@ -1,4 +1,8 @@
 {
-  "buildCommand": "prisma generate && next build",
-  "outputDirectory": ".next"
+  "services": {
+    "web": {
+      "root": ".",
+      "framework": "nextjs"
+    }
+  }
 }
