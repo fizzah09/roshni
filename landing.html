@@ -1,60 +1,519 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Welcome — after dark</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Roshni — Sign in</title>
+<meta name="description" content="Roshni — Pakistan's crowdsourced load-shedding tracker. Sign in to report outages and view live feeder schedules.">
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@500&display=swap');
 
-  <!-- Google fonts (same as the sign‑in page) -->
-  <link
-    href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@500&display=swap"
-    rel="stylesheet">
+  :root {
+    --night: #0a0d13;
+    --night-2: #10141c;
+    --porch: #2c2117;
+    --porch-2: #453423;
+    --amber: #ffcb6b;
+    --amber-hot: #fff3d6;
+    --moon: #7f8fa3;
+    --ink: #eee7d8;
+    --ink-dim: #b9b2a2;
+    --wire: #1c2029;
+    --green: #7CFF9E;
+  }
 
-  <link rel="stylesheet" href="landing.css">
+  * { box-sizing: border-box; }
+  html, body { margin: 0; height: 100%; background: var(--night); overflow: hidden; }
 
-  <!-- The same motion‑sensor script from the sign‑in page – reused unchanged -->
-  <script defer src="glow.js"></script>
+  body {
+    font-family: 'Inter', sans-serif;
+    color: var(--ink);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    cursor: none;
+  }
+
+  .sky {
+    position: absolute; inset: 0;
+    background:
+      radial-gradient(1px 1px at 12% 18%, rgba(255,255,255,0.5) 0, transparent 60%),
+      radial-gradient(1px 1px at 24% 62%, rgba(255,255,255,0.35) 0, transparent 60%),
+      radial-gradient(1.5px 1.5px at 68% 12%, rgba(255,255,255,0.4) 0, transparent 60%),
+      radial-gradient(1px 1px at 82% 74%, rgba(255,255,255,0.3) 0, transparent 60%),
+      radial-gradient(1px 1px at 40% 85%, rgba(255,255,255,0.4) 0, transparent 60%),
+      radial-gradient(1.5px 1.5px at 91% 38%, rgba(255,255,255,0.35) 0, transparent 60%),
+      radial-gradient(1px 1px at 55% 55%, rgba(255,255,255,0.25) 0, transparent 60%),
+      linear-gradient(180deg, var(--night) 0%, var(--night-2) 100%);
+  }
+
+  .glow {
+    position: fixed; top: 0; left: 0;
+    width: 900px; height: 900px;
+    border-radius: 50%; pointer-events: none;
+    transform: translate(-50%,-50%);
+    background: radial-gradient(circle, rgba(255,203,107,var(--g,0)) 0%, rgba(255,203,107,calc(var(--g,0)*0.35)) 28%, transparent 65%);
+    z-index: 2; mix-blend-mode: screen;
+  }
+
+  .cursor-dot {
+    position: fixed; top: 0; left: 0;
+    width: 10px; height: 10px; margin: -5px 0 0 -5px;
+    border-radius: 50%;
+    background: var(--amber-hot);
+    box-shadow: 0 0 8px 2px rgba(255,203,107,0.9);
+    pointer-events: none; z-index: 6; opacity: 0.9;
+  }
+
+  /* Fixture */
+  .fixture {
+    position: absolute; top: 0; left: 50%;
+    transform: translateX(-50%);
+    display: flex; flex-direction: column; align-items: center; z-index: 3;
+  }
+  .cord { width: 3px; height: 64px; background: linear-gradient(180deg, var(--wire), #2a2f3b); }
+  .socket {
+    width: 46px; height: 22px;
+    background: linear-gradient(180deg, var(--porch-2), var(--porch));
+    border-radius: 6px 6px 4px 4px;
+    box-shadow: inset 0 -2px 3px rgba(0,0,0,0.5);
+  }
+  .bulb-wrap { position: relative; width: 84px; height: 108px; margin-top: -2px; }
+  .bulb-halo {
+    position: absolute; top: 8px; left: 50%; transform: translateX(-50%);
+    width: 220px; height: 220px; border-radius: 50%;
+    background: radial-gradient(circle, rgba(255,203,107,var(--charge-a,0)) 0%, transparent 70%);
+    filter: blur(2px); pointer-events: none;
+  }
+  svg.bulb { position: relative; z-index: 1; display: block; }
+  .charge-label {
+    margin-top: 10px;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--moon);
+  }
+  .charge-label b { color: var(--amber); font-weight: 500; }
+  .meter { width: 140px; height: 3px; margin-top: 8px; background: rgba(255,255,255,0.08); border-radius: 2px; overflow: hidden; }
+  .meter-fill { height: 100%; width: 0%; background: linear-gradient(90deg, #6b5327, var(--amber)); transition: width 0.1s linear; }
+
+  /* Card */
+  .porch-scene {
+    position: relative; z-index: 3;
+    display: flex; flex-direction: column; align-items: center;
+    padding-top: 220px;
+  }
+
+  .card {
+    width: 360px; max-width: 90vw;
+    border-radius: 16px; padding: 32px 32px 28px;
+    background: linear-gradient(180deg, rgba(20,17,13,0.9), rgba(12,10,8,0.95));
+    border: 1px solid rgba(255,203,107,0.08);
+    box-shadow: 0 30px 60px rgba(0,0,0,0.6);
+    opacity: 0.22; filter: blur(0.3px) brightness(0.55);
+    transition: opacity 0.25s ease, filter 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease;
+    backdrop-filter: blur(12px);
+  }
+  .card.lit {
+    opacity: 1; filter: brightness(1);
+    border-color: rgba(255,203,107,0.35);
+    box-shadow: 0 30px 70px rgba(0,0,0,0.7), 0 0 60px rgba(255,203,107,0.12);
+  }
+  .card.authed .auth-form { display: none; }
+  .card.authed .user-panel { display: flex; }
+
+  .eyebrow {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10.5px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--amber);
+    display: flex; align-items: center; gap: 7px; margin-bottom: 10px;
+  }
+  .eyebrow .dot {
+    width: 6px; height: 6px; border-radius: 50%; background: #55565b;
+    transition: background 0.2s, box-shadow 0.2s;
+  }
+  .card.lit .eyebrow .dot { background: var(--green); box-shadow: 0 0 6px 1px var(--green); }
+
+  h1 { font-family: 'Space Grotesk', sans-serif; font-weight: 600; font-size: 25px; line-height: 1.2; margin: 0 0 6px; color: var(--ink); }
+  .sub { font-size: 13.5px; color: var(--ink-dim); margin: 0 0 24px; line-height: 1.55; }
+
+  /* Form */
+  label { display: block; font-size: 11.5px; color: var(--ink-dim); margin: 0 0 6px; letter-spacing: 0.02em; }
+  .field { margin-bottom: 14px; }
+  input {
+    width: 100%; background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.09);
+    border-radius: 8px; padding: 11px 12px; font-size: 14px; color: var(--ink);
+    font-family: 'Inter', sans-serif; outline: none; transition: border-color 0.15s, background 0.15s;
+  }
+  input::placeholder { color: #6b6558; }
+  input:focus { border-color: rgba(255,203,107,0.55); background: rgba(255,203,107,0.05); }
+
+  .or-row {
+    display: flex; align-items: center; gap: 10px; margin: 16px 0;
+    color: #3e3830; font-size: 11.5px; letter-spacing: 0.08em; text-transform: uppercase;
+  }
+  .or-row::before, .or-row::after { content: ''; flex: 1; height: 1px; background: rgba(255,255,255,0.07); }
+
+  /* Google button */
+  .btn-google {
+    width: 100%; display: flex; align-items: center; justify-content: center; gap: 10px;
+    padding: 11px 16px; border-radius: 8px;
+    border: 1px solid rgba(255,255,255,0.13); background: rgba(255,255,255,0.05);
+    color: var(--ink); font-family: 'Space Grotesk', sans-serif; font-weight: 600; font-size: 14px;
+    cursor: pointer; transition: background 0.18s, border-color 0.18s, opacity 0.2s;
+    opacity: 0.35; pointer-events: none;
+  }
+  .card.lit .btn-google { opacity: 1; pointer-events: auto; }
+  .btn-google:hover { background: rgba(255,255,255,0.09); border-color: rgba(255,255,255,0.22); }
+  .btn-google svg { flex-shrink: 0; }
+
+  /* Email button */
+  .btn-email {
+    width: 100%; margin-top: 6px; padding: 11px 12px; border-radius: 8px; border: none;
+    background: linear-gradient(180deg, #ffd98a, var(--amber)); color: #201404;
+    font-family: 'Space Grotesk', sans-serif; font-weight: 600; font-size: 14px;
+    cursor: pointer; opacity: 0.35; pointer-events: none; transition: opacity 0.2s, filter 0.15s;
+  }
+  .card.lit .btn-email { opacity: 1; pointer-events: auto; }
+  .btn-email:hover { filter: brightness(1.06); }
+  .btn-email:active { filter: brightness(0.94); }
+
+  /* Loading spinner shown while Firebase processes */
+  .btn-google.loading, .btn-email.loading {
+    pointer-events: none; opacity: 0.7;
+  }
+
+  /* User panel */
+  .user-panel { display: none; flex-direction: column; align-items: center; gap: 14px; text-align: center; }
+  .user-avatar { width: 64px; height: 64px; border-radius: 50%; border: 2px solid rgba(255,203,107,0.4); object-fit: cover; }
+  .user-name { font-family: 'Space Grotesk', sans-serif; font-size: 18px; font-weight: 600; }
+  .user-email { font-size: 12px; color: var(--ink-dim); margin-top: -10px; }
+  .btn-enter {
+    width: 100%; padding: 12px; border-radius: 8px; border: none;
+    background: linear-gradient(180deg, #ffd98a, var(--amber)); color: #201404;
+    font-family: 'Space Grotesk', sans-serif; font-weight: 700; font-size: 14px;
+    cursor: pointer; transition: filter 0.15s;
+  }
+  .btn-enter:hover { filter: brightness(1.07); }
+  .btn-logout {
+    background: none; border: none; color: var(--moon); font-size: 12px;
+    cursor: pointer; text-decoration: underline; padding: 0;
+  }
+  .btn-logout:hover { color: var(--ink); }
+
+  .foot { margin-top: 18px; text-align: center; font-size: 12px; color: #6b6558; }
+  .foot a { color: var(--moon); text-decoration: none; border-bottom: 1px dotted rgba(127,143,163,0.5); }
+
+  /* Toast */
+  .toast {
+    position: fixed; bottom: 28px; left: 50%;
+    transform: translateX(-50%) translateY(80px);
+    background: rgba(255,203,107,0.15); border: 1px solid rgba(255,203,107,0.35);
+    color: var(--amber); font-family: 'IBM Plex Mono', monospace;
+    font-size: 12px; letter-spacing: 0.08em;
+    padding: 10px 20px; border-radius: 8px; z-index: 10;
+    transition: transform 0.3s cubic-bezier(0.34,1.56,0.64,1);
+    white-space: nowrap; backdrop-filter: blur(8px);
+  }
+  .toast.show { transform: translateX(-50%) translateY(0); }
+  .toast.error { border-color: rgba(255,100,100,0.4); color: #ff9a9a; background: rgba(255,100,100,0.1); }
+
+  /* Manual switch */
+  .switch-row {
+    position: absolute; bottom: 22px; left: 50%; transform: translateX(-50%);
+    z-index: 4; display: flex; align-items: center; gap: 10px;
+    font-family: 'IBM Plex Mono', monospace; font-size: 10.5px;
+    letter-spacing: 0.1em; text-transform: uppercase; color: var(--moon);
+  }
+  .switch {
+    width: 40px; height: 22px; border-radius: 12px;
+    background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.12);
+    position: relative; cursor: pointer; padding: 0;
+  }
+  .switch::after {
+    content: ''; position: absolute; top: 2px; left: 2px;
+    width: 16px; height: 16px; border-radius: 50%; background: var(--moon);
+    transition: left 0.18s ease, background 0.18s ease;
+  }
+  .switch[aria-pressed="true"] { background: rgba(255,203,107,0.18); border-color: rgba(255,203,107,0.4); }
+  .switch[aria-pressed="true"]::after { left: 20px; background: var(--amber); box-shadow: 0 0 6px 1px rgba(255,203,107,0.8); }
+
+  * { -webkit-tap-highlight-color: transparent; }
+  button:focus-visible, a:focus-visible, input:focus-visible { outline: 2px solid var(--amber); outline-offset: 2px; }
+
+  @media (max-width: 420px) { .porch-scene { padding-top: 190px; } .glow { width: 600px; height: 600px; } }
+  @media (prefers-reduced-motion: reduce) {
+    * { transition-duration: 0.01ms !important; } .glow { display: none; }
+    body { cursor: auto; } .cursor-dot { display: none; }
+  }
+</style>
 </head>
-
 <body>
 
-  <!-- Ambient night texture -->
-  <div class="sky"></div>
+<div class="sky"></div>
+<div class="glow" id="glow"></div>
+<div class="cursor-dot" id="cursorDot"></div>
 
-  <!-- Cursor glow & dot -->
-  <div class="glow" id="glow"></div>
-  <div class="cursor-dot" id="cursorDot"></div>
+<!-- Hanging bulb -->
+<div class="fixture">
+  <div class="cord"></div>
+  <div class="socket"></div>
+  <div class="bulb-wrap">
+    <div class="bulb-halo" id="halo"></div>
+    <svg class="bulb" width="84" height="100" viewBox="0 0 84 100">
+      <ellipse id="glass" cx="42" cy="40" rx="30" ry="34" fill="rgba(255,225,150,0.05)"/>
+      <path d="M42 8 C 24 8, 12 22, 12 40 C 12 54, 20 62, 28 68 L 28 78 L 56 78 L 56 68 C 64 62, 72 54, 72 40 C 72 22, 60 8, 42 8 Z" fill="none" stroke="rgba(255,255,255,0.14)" stroke-width="1.5"/>
+      <path id="filament" d="M32 66 L32 50 L38 58 L32 66 M32 50 L52 50 M52 66 L52 50 L46 58 L52 66" fill="none" stroke="rgba(255,180,80,0.15)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+      <rect x="30" y="78" width="24" height="6" rx="1.5" fill="#39322a"/>
+      <rect x="32" y="84" width="20" height="4" rx="1.5" fill="#2c271f"/>
+      <rect x="34" y="88" width="16" height="4" rx="1.5" fill="#221e18"/>
+    </svg>
+  </div>
+  <div class="charge-label">sensor reading — <b id="chargeNum">0</b>%</div>
+  <div class="meter"><div class="meter-fill" id="meterFill"></div></div>
+</div>
 
-  <!-- ====================== HERO SECTION ====================== -->
-  <section class="hero">
-    <h1 class="title">After Dark</h1>
-    <p class="subtitle">A luminous web experience that awakens with you.</p>
+<!-- Auth card -->
+<div class="porch-scene">
+  <div class="card" id="card">
+    <div class="eyebrow"><span class="dot"></span> motion detected</div>
+    <h1>Come on in.</h1>
+    <p class="sub" id="cardSub">This porch light wakes up when it senses you. Keep moving until it's steady.</p>
 
-    <button class="cta" id="ctaBtn">Get Started</button>
-  </section>
+    <!-- Auth form -->
+    <div class="auth-form">
+      <div class="field">
+        <label for="email">Email</label>
+        <input id="emailInput" type="email" placeholder="you@example.com" autocomplete="email">
+      </div>
+      <div class="field">
+        <label for="passInput">Password</label>
+        <input id="passInput" type="password" placeholder="••••••••" autocomplete="current-password">
+      </div>
+      <button class="btn-email" id="emailSignIn">Sign in with email</button>
 
-  <!-- ====================== FEATURES ====================== -->
-  <section class="features">
-    <div class="feature-card">
-      <h2>Dynamic Glow</h2>
-      <p>Follow the cursor with a soft amber halo that reacts to your motion.</p>
+      <div class="or-row">or</div>
+
+      <!-- Google sign-in via Firebase -->
+      <button class="btn-google" id="googleSignIn">
+        <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
+          <path d="M17.64 9.205c0-.638-.058-1.252-.164-1.841H9v3.481h4.844a4.14 4.14 0 01-1.796 2.716v2.259h2.908c1.702-1.567 2.684-3.875 2.684-6.615z" fill="#4285F4"/>
+          <path d="M9 18c2.43 0 4.467-.806 5.956-2.18l-2.908-2.259c-.806.54-1.837.86-3.048.86-2.344 0-4.328-1.584-5.036-3.711H.957v2.332A8.997 8.997 0 009 18z" fill="#34A853"/>
+          <path d="M3.964 10.71A5.41 5.41 0 013.682 9c0-.593.102-1.17.282-1.71V4.958H.957A8.996 8.996 0 000 9c0 1.452.348 2.827.957 4.042l3.007-2.332z" fill="#FBBC05"/>
+          <path d="M9 3.58c1.321 0 2.508.454 3.44 1.345l2.582-2.58C13.463.891 11.426 0 9 0A8.997 8.997 0 00.957 4.958L3.964 7.29C4.672 5.163 6.656 3.58 9 3.58z" fill="#EA4335"/>
+        </svg>
+        Continue with Google
+      </button>
     </div>
-    <div class="feature-card">
-      <h2>Glass‑morphic UI</h2>
-      <p>Frosted‑glass panels blend seamlessly with the dark night backdrop.</p>
-    </div>
-    <div class="feature-card">
-      <h2>Reduced‑Motion Friendly</h2>
-      <p>Accessible fallback for users who prefer minimal animation.</p>
-    </div>
-  </section>
 
-  <!-- ====================== FOOTER ====================== -->
-  <footer class="footer">
-    <p>© 2026 After Dark. All rights reserved.</p>
-    <p><a href="#">Privacy Policy</a> • <a href="#">Terms of Service</a></p>
-  </footer>
+    <!-- Logged-in user panel -->
+    <div class="user-panel" id="userPanel">
+      <img class="user-avatar" id="userAvatar" src="" alt="Profile picture">
+      <div class="user-name" id="userName">Welcome back</div>
+      <div class="user-email" id="userEmail"></div>
+      <button class="btn-enter" onclick="window.location.href='index.html'">Enter Roshni →</button>
+      <button class="btn-logout" id="logoutBtn">Sign out</button>
+    </div>
+
+    <p class="foot">No account? <a href="#" id="toggleMode">Create one</a></p>
+  </div>
+</div>
+
+<div class="switch-row">
+  <span>Manual switch</span>
+  <button class="switch" id="manualSwitch" role="switch" aria-pressed="false" aria-label="Toggle porch light"></button>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<!-- ═══════════════════════════════════════════════════════════════════
+     Firebase SDK (via CDN — no build step needed)
+     ═══════════════════════════════════════════════════════════════════ -->
+<script type="module">
+  import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js';
+  import {
+    getAuth,
+    GoogleAuthProvider,
+    signInWithPopup,
+    signInWithEmailAndPassword,
+    createUserWithEmailAndPassword,
+    signOut,
+    onAuthStateChanged
+  } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js';
+
+  // ──────────────────────────────────────────────────────────────────
+  // 🔑  PASTE YOUR FIREBASE CONFIG HERE
+  //     Firebase Console → Project Settings → Your apps → SDK setup
+  // ──────────────────────────────────────────────────────────────────
+  const firebaseConfig = {
+    apiKey:            "YOUR_API_KEY",
+    authDomain:        "YOUR_PROJECT_ID.firebaseapp.com",
+    projectId:         "YOUR_PROJECT_ID",
+    storageBucket:     "YOUR_PROJECT_ID.appspot.com",
+    messagingSenderId: "YOUR_SENDER_ID",
+    appId:             "YOUR_APP_ID"
+  };
+
+  const app      = initializeApp(firebaseConfig);
+  const auth     = getAuth(app);
+  const provider = new GoogleAuthProvider();
+
+  // ── DOM refs ──────────────────────────────────────────────────────
+  const card        = document.getElementById('card');
+  const cardSub     = document.getElementById('cardSub');
+  const googleBtn   = document.getElementById('googleSignIn');
+  const emailBtn    = document.getElementById('emailSignIn');
+  const emailInput  = document.getElementById('emailInput');
+  const passInput   = document.getElementById('passInput');
+  const userAvatar  = document.getElementById('userAvatar');
+  const userName    = document.getElementById('userName');
+  const userEmail   = document.getElementById('userEmail');
+  const logoutBtn   = document.getElementById('logoutBtn');
+  const toggleMode  = document.getElementById('toggleMode');
+  const toast       = document.getElementById('toast');
+
+  let isSignUpMode = false;
+
+  // ── Toggle sign-up / sign-in ─────────────────────────────────────
+  toggleMode.addEventListener('click', e => {
+    e.preventDefault();
+    isSignUpMode = !isSignUpMode;
+    emailBtn.textContent = isSignUpMode ? 'Create account' : 'Sign in with email';
+    toggleMode.textContent = isSignUpMode ? 'Already have one? Sign in' : 'Create one';
+  });
+
+  // ── Google Sign-In (popup) ────────────────────────────────────────
+  googleBtn.addEventListener('click', async () => {
+    googleBtn.classList.add('loading');
+    try {
+      await signInWithPopup(auth, provider);
+      // onAuthStateChanged handles the UI update
+    } catch (err) {
+      showToast(friendlyError(err), true);
+    } finally {
+      googleBtn.classList.remove('loading');
+    }
+  });
+
+  // ── Email Sign-In / Sign-Up ───────────────────────────────────────
+  emailBtn.addEventListener('click', async () => {
+    const email = emailInput.value.trim();
+    const pass  = passInput.value;
+    if (!email || !pass) { showToast('Enter your email and password.', true); return; }
+
+    emailBtn.classList.add('loading');
+    try {
+      if (isSignUpMode) {
+        await createUserWithEmailAndPassword(auth, email, pass);
+      } else {
+        await signInWithEmailAndPassword(auth, email, pass);
+      }
+    } catch (err) {
+      showToast(friendlyError(err), true);
+    } finally {
+      emailBtn.classList.remove('loading');
+    }
+  });
+
+  // ── Sign Out ──────────────────────────────────────────────────────
+  logoutBtn.addEventListener('click', async () => {
+    await signOut(auth);
+    showToast('Signed out.');
+  });
+
+  // ── Auth state observer — single source of truth ─────────────────
+  onAuthStateChanged(auth, user => {
+    if (user) {
+      // Show user panel
+      card.classList.add('authed');
+      userAvatar.src = user.photoURL || `https://ui-avatars.com/api/?name=${encodeURIComponent(user.displayName||'User')}&background=ffcb6b&color=201404`;
+      userName.textContent = user.displayName || 'Roshni User';
+      userEmail.textContent = user.email;
+      cardSub.textContent = 'Welcome back. Your light is on.';
+      showToast('✓ Signed in — ' + (user.displayName || user.email));
+    } else {
+      // Show login form
+      card.classList.remove('authed');
+      cardSub.textContent = 'This porch light wakes up when it senses you. Keep moving until it\'s steady.';
+    }
+  });
+
+  // ── Error messages ────────────────────────────────────────────────
+  function friendlyError(err) {
+    const map = {
+      'auth/user-not-found':       'No account with that email.',
+      'auth/wrong-password':       'Incorrect password.',
+      'auth/email-already-in-use': 'Email already in use — try signing in.',
+      'auth/weak-password':        'Password must be at least 6 characters.',
+      'auth/invalid-email':        'Invalid email address.',
+      'auth/popup-closed-by-user': 'Sign-in cancelled.',
+      'auth/network-request-failed': 'Network error — check your connection.',
+      'auth/unauthorized-domain':  'Domain not authorised in Firebase console.',
+    };
+    return map[err.code] || err.message;
+  }
+
+  // ── Toast ─────────────────────────────────────────────────────────
+  function showToast(msg, isError) {
+    toast.textContent = msg;
+    toast.classList.toggle('error', !!isError);
+    toast.classList.add('show');
+    clearTimeout(toast._t);
+    toast._t = setTimeout(() => toast.classList.remove('show'), 3500);
+  }
+
+  // ── Porch-light animation (unchanged) ────────────────────────────
+  const glow      = document.getElementById('glow');
+  const dot       = document.getElementById('cursorDot');
+  const halo      = document.getElementById('halo');
+  const chargeNum = document.getElementById('chargeNum');
+  const meterFill = document.getElementById('meterFill');
+  const filament  = document.getElementById('filament');
+  const glass     = document.getElementById('glass');
+  const manualSw  = document.getElementById('manualSwitch');
+
+  const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  let lastX = window.innerWidth / 2, lastY = window.innerHeight / 2;
+  let charge = 0, manualOn = false, lastMoveTime = performance.now();
+
+  function setPointer(x, y) {
+    glow.style.left = x + 'px'; glow.style.top = y + 'px';
+    dot.style.left  = x + 'px'; dot.style.top  = y + 'px';
+  }
+
+  document.addEventListener('mousemove', e => {
+    const dx = e.clientX - lastX, dy = e.clientY - lastY;
+    charge = Math.min(100, charge + Math.sqrt(dx*dx + dy*dy) * 0.35);
+    lastX = e.clientX; lastY = e.clientY; lastMoveTime = performance.now();
+    setPointer(e.clientX, e.clientY);
+  });
+
+  manualSw.addEventListener('click', () => {
+    manualOn = !manualOn;
+    manualSw.setAttribute('aria-pressed', manualOn);
+    if (manualOn) charge = 100;
+  });
+
+  function frame() {
+    const idle = performance.now() - lastMoveTime;
+    if (!manualOn) charge = Math.max(0, charge - (idle > 120 ? 0.9 : 0.35));
+
+    const c = charge / 100;
+    document.documentElement.style.setProperty('--g', (reduced ? 0 : c * 0.9).toFixed(3));
+    glow.style.opacity = reduced ? 0 : Math.min(1, c * 1.3);
+    halo.style.setProperty('--charge-a', (0.05 + c * 0.5).toFixed(3));
+    filament.style.stroke = `rgba(255,${Math.round(180+c*60)},${Math.round(80+c*100)},${(0.15+c*0.85).toFixed(3)})`;
+    glass.style.fill = `rgba(255,225,150,${(0.05+c*0.55).toFixed(3)})`;
+    chargeNum.textContent = Math.round(charge);
+    meterFill.style.width = charge + '%';
+
+    if (charge > 62) card.classList.add('lit');
+    else if (charge < 40) card.classList.remove('lit');
+    requestAnimationFrame(frame);
+  }
+
+  if (reduced) { charge = 80; card.classList.add('lit'); }
+  setPointer(lastX, lastY);
+  requestAnimationFrame(frame);
+</script>
+
 </body>
-
 </html>
