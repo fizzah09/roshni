@@ -88,35 +88,35 @@ export const FeederExplorer: React.FC<FeederExplorerProps> = ({
   };
 
   return (
-    <div class="flex flex-col gap-6 w-full max-w-7xl mx-auto">
+    <div className="flex flex-col gap-6 w-full max-w-7xl mx-auto">
       {/* Search Header */}
-      <div class="flex flex-col gap-3 w-full max-w-3xl mx-auto text-center">
-        <h1 class="text-2xl md:text-3xl font-bold tracking-tight text-on-surface">
+      <div className="flex flex-col gap-3 w-full max-w-3xl mx-auto text-center">
+        <h1 className="text-2xl md:text-3xl font-bold tracking-tight text-on-surface">
           {lang === 'en' ? 'LOCATE FEEDER / تلاش کریں' : 'تلاش کریں - فیڈر اور بجلی کی معلومات'}
         </h1>
-        <p class="text-on-surface-variant text-sm font-mono">
+        <p className="text-on-surface-variant text-sm font-mono">
           National Pakistan DISCO Load Shedding Tracker & KE Territory Feeder Directory
         </p>
 
         {/* Search Bar */}
-        <div class="relative w-full">
-          <Search class="absolute left-4 top-4 w-5 h-5 text-on-surface-variant" />
+        <div className="relative w-full">
+          <Search className="absolute left-4 top-4 w-5 h-5 text-on-surface-variant" />
           <input
             type="text"
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             placeholder="Search DISCO (LESCO, IESCO, KE, PESCO...), Grid, City, or Feeder..."
-            class="w-full bg-surface-container-lowest text-on-surface text-base border border-outline-variant rounded-lg pl-12 pr-4 py-3.5 focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-all font-mono"
+            className="w-full bg-surface-container-lowest text-on-surface text-base border border-outline-variant rounded-lg pl-12 pr-4 py-3.5 focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-all font-mono"
           />
         </div>
 
         {/* DISCO Filter Chips */}
-        <div class="flex flex-wrap gap-2 justify-center items-center mt-2">
+        <div className="flex flex-wrap gap-2 justify-center items-center mt-2">
           {['ALL', 'LESCO', 'IESCO', 'K-ELECTRIC', 'PESCO', 'MEPCO', 'GEPCO', 'FESCO'].map((disco) => (
             <button
               key={disco}
               onClick={() => setSelectedDisco(disco)}
-              class={`px-3 py-1 rounded-full text-xs font-mono font-bold transition-all ${
+              className={`px-3 py-1 rounded-full text-xs font-mono font-bold transition-all ${
                 selectedDisco === disco
                   ? 'bg-primary text-on-primary border border-primary shadow-[0_0_10px_rgba(87,241,219,0.3)]'
                   : 'bg-surface-container text-on-surface-variant border border-outline-variant hover:border-primary/50'
@@ -135,47 +135,47 @@ export const FeederExplorer: React.FC<FeederExplorerProps> = ({
       />
 
       {/* Feeder Cards Grid */}
-      <div class="flex flex-col gap-4 mt-4">
-        <div class="flex justify-between items-end border-b border-outline-variant pb-2">
-          <h2 class="text-xl font-bold text-on-surface">
+      <div className="flex flex-col gap-4 mt-4">
+        <div className="flex justify-between items-end border-b border-outline-variant pb-2">
+          <h2 className="text-xl font-bold text-on-surface">
             {lang === 'en' ? 'FEEDERS & 24H SCHEDULE TIMELINES' : 'حالیہ فیڈرز اور 4 سائيکل شیڈول'}
           </h2>
-          <span class="text-xs font-mono text-on-surface-variant">
+          <span className="text-xs font-mono text-on-surface-variant">
             PERSISTENT DB DATASET
           </span>
         </div>
 
         {loading ? (
-          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
             {[1, 2, 3].map((n) => (
-              <div key={n} class="h-44 bg-surface-container animate-pulse rounded-lg border border-outline-variant" />
+              <div key={n} className="h-44 bg-surface-container animate-pulse rounded-lg border border-outline-variant" />
             ))}
           </div>
         ) : filteredFeeders.length === 0 ? (
-          <div class="p-8 text-center bg-surface-container border border-outline-variant rounded-lg">
-            <p class="text-on-surface-variant font-mono">No feeders found matching search criteria.</p>
+          <div className="p-8 text-center bg-surface-container border border-outline-variant rounded-lg">
+            <p className="text-on-surface-variant font-mono">No feeders found matching search criteria.</p>
           </div>
         ) : (
-          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
             {filteredFeeders.map((feeder) => (
               <motion.div
                 key={feeder.id}
                 layoutId={`feeder-card-${feeder.id}`}
                 whileHover={{ scale: 1.01 }}
-                class="bg-surface-container border border-outline-variant rounded-lg p-4 flex flex-col justify-between gap-3 cursor-pointer hover:border-primary/60 transition-all group"
+                className="bg-surface-container border border-outline-variant rounded-lg p-4 flex flex-col justify-between gap-3 cursor-pointer hover:border-primary/60 transition-all group"
                 onClick={() => setSelectedFeeder(feeder)}
               >
-                <div class="flex justify-between items-start">
+                <div className="flex justify-between items-start">
                   <div>
-                    <span class="text-xs font-mono text-on-surface-variant">
+                    <span className="text-xs font-mono text-on-surface-variant">
                       {feeder.disco.code} / {feeder.gridStation}
                     </span>
-                    <h3 class="text-base font-bold text-on-surface group-hover:text-primary transition-colors">
+                    <h3 className="text-base font-bold text-on-surface group-hover:text-primary transition-colors">
                       {feeder.name}
                     </h3>
                   </div>
                   <span
-                    class={`px-2 py-0.5 rounded text-xs font-mono font-bold border ${
+                    className={`px-2 py-0.5 rounded text-xs font-mono font-bold border ${
                       feeder.status === 'OFFLINE'
                         ? 'border-error text-error bg-error-container/20'
                         : 'border-primary text-primary bg-primary-container/20'
@@ -185,19 +185,19 @@ export const FeederExplorer: React.FC<FeederExplorerProps> = ({
                   </span>
                 </div>
 
-                <div class="flex justify-between items-center text-xs font-mono text-on-surface-variant">
+                <div className="flex justify-between items-center text-xs font-mono text-on-surface-variant">
                   <span>{feeder.lossCategory} ({feeder.lossPercentage})</span>
-                  <span class="text-primary">{feeder.city}</span>
+                  <span className="text-primary">{feeder.city}</span>
                 </div>
 
                 {/* 24-Hour Timeline Bar with Framer Motion Load-in Wipe (~400ms) */}
-                <div class="mt-2">
-                  <div class="flex justify-between text-[10px] font-mono text-on-surface-variant mb-1">
+                <div className="mt-2">
+                  <div className="flex justify-between text-[10px] font-mono text-on-surface-variant mb-1">
                     <span>00:00</span>
                     <span>12:00</span>
                     <span>24:00</span>
                   </div>
-                  <div class="w-full h-3 bg-surface-container-lowest rounded-full overflow-hidden relative border border-outline-variant/40">
+                  <div className="w-full h-3 bg-surface-container-lowest rounded-full overflow-hidden relative border border-outline-variant/40">
                     {/* Wiped Outage Blocks */}
                     {feeder.schedules.map((s, idx) => {
                       const leftPct = (s.startDecimal / 24) * 100;
@@ -211,7 +211,7 @@ export const FeederExplorer: React.FC<FeederExplorerProps> = ({
                           animate={{ width: `${widthPct}%` }}
                           transition={{ duration: 0.4, delay: idx * 0.1, ease: 'easeOut' }}
                           style={{ left: `${leftPct}%` }}
-                          class="absolute h-full bg-gradient-to-r from-red-900/80 to-error/80 border-r border-error/50"
+                          className="absolute h-full bg-gradient-to-r from-red-900/80 to-error/80 border-r border-error/50"
                         />
                       );
                     })}
@@ -228,7 +228,7 @@ export const FeederExplorer: React.FC<FeederExplorerProps> = ({
                           animate={{ scale: [1, 1.08, 1] }}
                           transition={{ repeat: Infinity, duration: 1.8 }}
                           style={{ left: `${leftPct}%` }}
-                          class="absolute h-full w-1.5 bg-primary shadow-[0_0_8px_#57f1db] z-20"
+                          className="absolute h-full w-1.5 bg-primary shadow-[0_0_8px_#57f1db] z-20"
                           title={`Reported at ${new Date(o.startTime).toLocaleTimeString()}: ${o.note || 'Unscheduled cut'}`}
                         />
                       );
@@ -236,24 +236,24 @@ export const FeederExplorer: React.FC<FeederExplorerProps> = ({
                   </div>
                 </div>
 
-                <div class="flex justify-between items-center pt-2 border-t border-outline-variant/30 text-xs">
+                <div className="flex justify-between items-center pt-2 border-t border-outline-variant/30 text-xs">
                   <button
                     onClick={(e) => {
                       e.stopPropagation();
                       onOpenReportModal(feeder.id);
                     }}
-                    class="text-primary hover:underline font-mono flex items-center gap-1 font-bold"
+                    className="text-primary hover:underline font-mono flex items-center gap-1 font-bold"
                   >
-                    <Zap class="w-3.5 h-3.5" /> Report Outage
+                    <Zap className="w-3.5 h-3.5" /> Report Outage
                   </button>
                   <button
                     onClick={(e) => {
                       e.stopPropagation();
                       downloadCSV(feeder);
                     }}
-                    class="text-on-surface-variant hover:text-on-surface font-mono flex items-center gap-1"
+                    className="text-on-surface-variant hover:text-on-surface font-mono flex items-center gap-1"
                   >
-                    <Download class="w-3.5 h-3.5" /> CSV
+                    <Download className="w-3.5 h-3.5" /> CSV
                   </button>
                 </div>
               </motion.div>

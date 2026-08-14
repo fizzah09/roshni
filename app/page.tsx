@@ -25,7 +25,7 @@ export default function HomePage() {
   };
 
   return (
-    <div class="flex flex-col min-h-screen">
+    <div className="flex flex-col min-h-screen">
       <Navbar
         currentView={currentView}
         onSelectView={(v) => setCurrentView(v as any)}
@@ -33,7 +33,7 @@ export default function HomePage() {
         onToggleLang={handleToggleLang}
       />
 
-      <main class="flex-grow w-full max-w-7xl mx-auto px-4 md:px-8 py-6 md:py-10">
+      <main className="flex-grow w-full max-w-7xl mx-auto px-4 md:px-8 py-6 md:py-10">
         {currentView === 'home' && (
           <FeederExplorer
             onOpenReportModal={handleOpenReportModal}

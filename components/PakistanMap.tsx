@@ -100,39 +100,39 @@ export const PakistanMap: React.FC<PakistanMapProps> = ({
   const currentData = hoveredDistrict && DISTRICT_DATA[hoveredDistrict] ? DISTRICT_DATA[hoveredDistrict] : null;
 
   return (
-    <div class="bg-surface-container border border-outline-variant rounded-lg p-4 relative overflow-hidden flex flex-col gap-3">
-      <div class="flex justify-between items-center flex-wrap gap-2">
+    <div className="bg-surface-container border border-outline-variant rounded-lg p-4 relative overflow-hidden flex flex-col gap-3">
+      <div className="flex justify-between items-center flex-wrap gap-2">
         <div>
-          <h2 class="text-xl font-bold text-on-surface flex items-center gap-2">
-            <span class="text-primary font-mono">🌐</span>
+          <h2 className="text-xl font-bold text-on-surface flex items-center gap-2">
+            <span className="text-primary font-mono">🌐</span>
             <span>NATIONAL PAKISTAN DISTRICT VECTOR MAP</span>
           </h2>
-          <p class="text-xs text-on-surface-variant font-mono">
+          <p className="text-xs text-on-surface-variant font-mono">
             Hover over any district to inspect feeder counts, loss categories, and DISCO territories. Click to filter.
           </p>
         </div>
       </div>
 
-      <div class="relative w-full h-[540px] bg-surface-container-lowest border border-outline-variant/40 rounded overflow-hidden flex items-center justify-center">
+      <div className="relative w-full h-[540px] bg-surface-container-lowest border border-outline-variant/40 rounded overflow-hidden flex items-center justify-center">
         {/* Zoom Controls */}
-        <div class="absolute top-4 left-4 z-30 flex flex-col gap-2">
+        <div className="absolute top-4 left-4 z-30 flex flex-col gap-2">
           <button
             onClick={handleZoomIn}
-            class="w-9 h-9 bg-white text-surface-dim font-bold text-xl rounded-md shadow-lg hover:bg-primary transition-all flex items-center justify-center border border-slate-300"
+            className="w-9 h-9 bg-white text-surface-dim font-bold text-xl rounded-md shadow-lg hover:bg-primary transition-all flex items-center justify-center border border-slate-300"
             title="Zoom In"
           >
             +
           </button>
           <button
             onClick={handleZoomOut}
-            class="w-9 h-9 bg-white text-surface-dim font-bold text-xl rounded-md shadow-lg hover:bg-primary transition-all flex items-center justify-center border border-slate-300"
+            className="w-9 h-9 bg-white text-surface-dim font-bold text-xl rounded-md shadow-lg hover:bg-primary transition-all flex items-center justify-center border border-slate-300"
             title="Zoom Out"
           >
             −
           </button>
           <button
             onClick={handleResetZoom}
-            class="w-9 h-9 bg-white text-surface-dim font-bold text-xs rounded-md shadow-lg hover:bg-primary transition-all flex items-center justify-center border border-slate-300"
+            className="w-9 h-9 bg-white text-surface-dim font-bold text-xs rounded-md shadow-lg hover:bg-primary transition-all flex items-center justify-center border border-slate-300"
             title="Reset View"
           >
             ↺
@@ -143,13 +143,13 @@ export const PakistanMap: React.FC<PakistanMapProps> = ({
         <motion.svg
           id="map"
           viewBox="0 0 1628 1544"
-          class="w-full h-full cursor-pointer"
+          className="w-full h-full cursor-pointer"
           animate={{ scale: zoomScale }}
           transition={{ type: 'spring', stiffness: 200, damping: 25 }}
         >
           {/* Islamabad Capital Territory Group */}
-          <g class="model-green">
-            <a id="state_isl" class="state">
+          <g className="model-green">
+            <a id="state_isl" className="state">
               <motion.path
                 id="Islamabad"
                 d="m 1246.3,392.4 -3.2,-4.2 -2.8,0.2 -10.6,-7.8 -25.6,9.2 -11.8,3.6 6.4,13.8 18,-8.8 6.8,10.2 -3.8,3 6,4.8 11.2,-7.2 1.6,-9 z"
@@ -263,29 +263,29 @@ export const PakistanMap: React.FC<PakistanMapProps> = ({
           <motion.div
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
-            class="absolute bottom-4 right-4 z-40 bg-surface-container/95 backdrop-blur-md border border-primary/50 p-4 rounded-lg shadow-2xl max-w-xs"
+            className="absolute bottom-4 right-4 z-40 bg-surface-container/95 backdrop-blur-md border border-primary/50 p-4 rounded-lg shadow-2xl max-w-xs"
           >
-            <div class="flex justify-between items-center mb-1">
-              <span class="text-xs font-mono text-primary font-bold">
+            <div className="flex justify-between items-center mb-1">
+              <span className="text-xs font-mono text-primary font-bold">
                 {currentData ? currentData.disco : 'NATIONAL DISCO'}
               </span>
-              <span class="text-[10px] px-1.5 py-0.5 rounded bg-surface-container-highest text-on-surface font-mono">
+              <span className="text-[10px] px-1.5 py-0.5 rounded bg-surface-container-highest text-on-surface font-mono">
                 {currentData ? currentData.province : 'Pakistan'}
               </span>
             </div>
-            <div class="text-base font-bold text-on-surface mb-1">
+            <div className="text-base font-bold text-on-surface mb-1">
               {hoveredDistrict.replace(/_/g, ' ')}
             </div>
             {currentData ? (
-              <div class="text-xs text-on-surface-variant space-y-1">
-                <div><strong>Loss Profile:</strong> <span class="text-error">{currentData.loss}</span></div>
+              <div className="text-xs text-on-surface-variant space-y-1">
+                <div><strong>Loss Profile:</strong> <span className="text-error">{currentData.loss}</span></div>
                 <div><strong>Active Feeders:</strong> {currentData.feeders}</div>
-                <div class="text-primary text-[11px] pt-1 flex items-center gap-1">
+                <div className="text-primary text-[11px] pt-1 flex items-center gap-1">
                   <span>Click district to filter feeders</span>
                 </div>
               </div>
             ) : (
-              <div class="text-xs text-on-surface-variant">Official Pakistan District Vector Territory</div>
+              <div className="text-xs text-on-surface-variant">Official Pakistan District Vector Territory</div>
             )}
           </motion.div>
         )}
